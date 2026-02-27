@@ -1,0 +1,48 @@
+services:
+  ui:
+    build: ./frontend/.
+    container_name: users-app
+    ports:
+     - "5173:80"
+    depends_on:
+      api:
+        condition: service_healthy
+  api:
+    build: ./backend/.
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgres 
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=pg@1290
+      - DB_NAME=userdb
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:  # Added: Proves API is ready
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+  postgres:
+    image: postgres:17-alpine  # Latest stable
+    restart: always
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pg@1290
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Optional schema
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d userdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
