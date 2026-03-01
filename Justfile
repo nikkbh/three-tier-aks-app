@@ -61,7 +61,7 @@ db-reset:
 
 # Health check all services
 health:
-    docker compose ps --format "table {{.Names}}\t{{.Status}}"
+    docker compose ps --format 'table {{ "{{" }}.Names{{ "}}" }}\t{{ "{{" }}.Status{{ "}}" }}'
 
 # Stop and remove everything, then start fresh
 restart:
@@ -83,6 +83,27 @@ ui-shell:
 # Execute command in postgres container
 db-shell:
     docker compose exec postgres psql -U postgres -d userdb
+
+run-ui:
+    cd frontend && npm run dev
+
+run-api:
+    cd backend && go run cmd/server/main.go
+
+tf-fmt:
+    @terraform fmt -recursive
+
+tf-validate:
+    @terraform validate
+
+tf-init:
+    @terraform init
+
+tf-plan:
+    @terraform plan --out=tfplan
+
+tf-apply:
+    @terraform apply "tfplan"
 
 # Display this help message
 help:

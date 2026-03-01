@@ -1,3 +1,35 @@
 /bin
 /node_modules
 .env*
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# .terraform directory (for lock files, if you want to commit them use !)
+.terraform/
+
+# Ignore all .tfvars files, which may contain sensitive data
+*.tfvars
+*.tfvars.json
+
+# Override files (optional, for local testing)
+*_override.tf
+*_override.tf.json
+
+# Plan files
+*.tfplan
+*.tfplan.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
+infra/terraform/**/tfplan
