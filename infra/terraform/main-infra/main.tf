@@ -2,6 +2,21 @@ locals {
   suffix = random_id.this.hex
 }
 
+data "azurerm_private_dns_zone" "pg-dns-zone" {
+  name                = "aksapp.postgres.database.azure.com" # or your exact zone name
+  resource_group_name = "rg-three-tier-aks"                  # DNS zone RG
+}
+
+data "azurerm_virtual_network" "aks-vnet" {
+  name                = "vnet-three-tier-app"
+  resource_group_name = "rg-three-tier-aks"
+}
+
+data "azurerm_kubernetes_cluster" "aks-data" {
+  name                = "aks-three-tier"
+  resource_group_name = "rg-three-tier-aks"
+}
+
 resource "random_id" "this" { byte_length = 4 }
 
 module "rg" {
@@ -96,6 +111,10 @@ module "postgres" {
   location            = var.location
   private_subnet_id   = module.postgres-subnet.subnet_id
   tags                = var.tags
+  extension_values    = "uuid-ossp"
+  aks_vnet_id         = data.azurerm_virtual_network.aks-vnet.id
+  dns_zone_name       = data.azurerm_private_dns_zone.pg-dns-zone.name
+  dns_zone_rg         = data.azurerm_private_dns_zone.pg-dns-zone.resource_group_name
 }
 
 module "jenkins-vm" {
@@ -145,6 +164,12 @@ module "appgw" {
   tags                = var.tags
 }
 
+module "aks_acr_pull_role_assignment" {
+  source       = "../modules/role-assignment"
+  scope_id     = module.acr.acr_id
+  role_name    = "AcrPull"
+  principal_id = data.azurerm_kubernetes_cluster.aks-data.kubelet_identity[0].object_id
+}
 
 
 

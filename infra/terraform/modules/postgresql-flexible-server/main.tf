@@ -27,3 +27,19 @@ resource "azurerm_postgresql_flexible_server" "this" {
 
   tags = var.tags
 }
+
+resource "azurerm_postgresql_flexible_server_configuration" "allow_extensions" {
+  name      = "azure.extensions"
+  server_id = azurerm_postgresql_flexible_server.this.id
+
+  # Include any other extensions you already use
+  value = var.extension_values
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "aks_link" {
+  name                  = "aks-link"
+  resource_group_name   = var.dns_zone_rg
+  private_dns_zone_name = var.dns_zone_name
+  virtual_network_id    = var.aks_vnet_id
+  registration_enabled  = false
+}

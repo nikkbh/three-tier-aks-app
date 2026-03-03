@@ -20,3 +20,23 @@ variable "tags" {
   type        = map(string)
 }
 
+variable "extension_values" {
+  type        = string
+  description = "Comma seperated extension values to be added to PostgreSQL's allow-lsit extensions via azure.extensions."
+}
+
+variable "aks_vnet_id" {
+  type        = string
+  description = "VNET ID used for AKS"
+}
+
+variable "dns_zone_name" {
+  type        = string
+  description = "Private DNS Zone name"
+}
+
+variable "dns_zone_rg" {
+  type        = string
+  description = "Private DNS Zone resource group name"
+}
+
