@@ -22,21 +22,7 @@ service:
   targetPort: 8080 # Go container listens on 8080
 
 env:
-  # - name: DB_HOST
-  #   value: "psqlthreetieraks.postgres.database.azure.com" # use terraform output later / secret
-  # - name: DB_PORT
-  #   value: "5432"
-  # - name: DB_USER
-  #   value: "pgadmin"
-  # - name: DB_PASSWORD
-  #   value: "FQ8Gbd4T7Ao\u0026U4Ct)vDh"
-  # - name: DB_NAME
-  #   value: "userdb"
-  dbHost: "psqlthreetieraks.postgres.database.azure.com"
-  dbPort: "5432"
-  dbUser: "pgadmin"
-  dbPassword: "adminPassword@1290"
-  dbName: "userdb"
+  extra: []
 
 resources:
   limits:
@@ -48,6 +34,7 @@ resources:
 
 ingress:
   enabled: true
+  standalone: false
   className: azure-application-gateway
   paths:
     - path: /api

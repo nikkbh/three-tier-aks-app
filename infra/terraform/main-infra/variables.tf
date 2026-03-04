@@ -71,3 +71,15 @@ variable "aks_vm_size" { default = "Standard_B2s" } # or "Standard_B2s" for chea
 variable "aks_version" { default = "1.32.0" }
 
 variable "appgw_name" { default = "appgw-three-tier" }
+
+variable "db_password" {
+  description = "The password for the PostgreSQL Felible Server"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_username" {
+  description = "The username for the PostgreSQL Felible Server"
+  type        = string
+  sensitive   = true
+}

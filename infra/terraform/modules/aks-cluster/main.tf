@@ -32,5 +32,86 @@ resource "azurerm_kubernetes_cluster" "this" {
     dns_service_ip = var.dns_service_ip
   }
 
+  key_vault_secrets_provider {
+    secret_rotation_enabled  = true
+    secret_rotation_interval = "2m" # example; adjust as needed
+  }
+
   tags = var.tags
 }
+
+
+resource "kubernetes_manifest" "backend_akv_spc" {
+  manifest = {
+    apiVersion = "secrets-store.csi.x-k8s.io/v1"
+    kind       = "SecretProviderClass"
+    metadata = {
+      name      = "backend-akv"
+      namespace = "prod"
+    }
+    spec = {
+      provider = "azure"
+      parameters = {
+        usePodIdentity       = "false"
+        useVMManagedIdentity = "true"
+        clientID             = "1fa01411-a04c-4cec-9c0f-a290fc559d27"
+        keyvaultName         = var.akv_name
+        tenantId             = var.tenant_id
+        subscriptionId       = var.subscription_id
+        resourceGroup        = var.resource_group_name
+        cloudName            = "" # Azure public
+
+        objects = <<-EOT
+          array:
+            - |
+              objectName: db-username
+              objectType: secret
+            - |
+              objectName: db-password
+              objectType: secret
+            - |
+              objectName: db-name
+              objectType: secret
+            - |
+              objectName: db-host
+              objectType: secret
+            - |
+              objectName: db-port
+              objectType: secret
+        EOT
+      }
+
+      # This block tells CSI driver to also create a K8s Secret from AKV objects
+      secretObjects = [
+        {
+          secretName = "backend-db-secrets"
+          type       = "Opaque"
+          data = [
+            {
+              objectName = "db-username"
+              key        = "DB_USERNAME"
+            },
+            {
+              objectName = "db-password"
+              key        = "DB_PASSWORD"
+            },
+            {
+              objectName = "db-name"
+              key        = "DB_NAME"
+            },
+            {
+              objectName = "db-host"
+              key        = "DB_HOST"
+            },
+            {
+              objectName = "db-port"
+              key        = "DB_PORT"
+            },
+          ]
+        }
+      ]
+    }
+  }
+
+}
+

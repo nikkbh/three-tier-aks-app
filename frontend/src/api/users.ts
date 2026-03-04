@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { User, CreateUserRequest, UpdateUserRequest } from '../types/api'
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1',
+    baseURL: '/api/v1',
 })
 
 export const usersApi = {

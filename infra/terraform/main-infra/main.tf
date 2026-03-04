@@ -17,6 +17,8 @@ data "azurerm_kubernetes_cluster" "aks-data" {
   resource_group_name = "rg-three-tier-aks"
 }
 
+data "azurerm_client_config" "current" {}
+
 resource "random_id" "this" { byte_length = 4 }
 
 module "rg" {
@@ -129,6 +131,17 @@ module "jenkins-vm" {
   tags                = var.tags
 }
 
+module "akv" {
+  source      = "../modules/akv"
+  akv_name    = "kv-three-tier-aks"
+  location    = var.location
+  rg          = module.rg.name
+  tenant_id   = data.azurerm_client_config.current.tenant_id
+  db_username = var.db_username
+  db_password = var.db_password
+  fqdn        = module.postgres.fqdn
+}
+
 module "aks" {
   source              = "../modules/aks-cluster"
   name                = var.aks_name
@@ -143,6 +156,10 @@ module "aks" {
   kubernetes_version = var.aks_version
   appgw_id           = module.appgw.id
   tags               = var.tags
+
+  akv_name        = module.akv.name
+  subscription_id = data.azurerm_client_config.current.subscription_id
+  tenant_id       = data.azurerm_client_config.current.tenant_id
 
   service_cidr   = "10.10.0.0/16"
   dns_service_ip = "10.10.0.10"
@@ -170,6 +187,23 @@ module "aks_acr_pull_role_assignment" {
   role_name    = "AcrPull"
   principal_id = data.azurerm_kubernetes_cluster.aks-data.kubelet_identity[0].object_id
 }
+
+module "aks_kv_secrets_user_role_assignment" {
+  source       = "../modules/role-assignment"
+  role_name    = "Key Vault Secrets User"
+  principal_id = data.azurerm_kubernetes_cluster.aks-data.kubelet_identity[0].object_id
+  scope_id     = module.akv.id
+}
+
+module "aks_kv_identity_secrets_user_role_assignment" {
+  source       = "../modules/role-assignment"
+  role_name    = "Key Vault Secrets User"
+  principal_id = module.aks.pid
+  scope_id     = module.akv.id
+}
+
+
+
 
 
 

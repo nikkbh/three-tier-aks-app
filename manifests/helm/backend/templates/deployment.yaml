@@ -16,23 +16,38 @@ spec:
         app: {{ include "backend.name" . }}
         {{- include "backend.labels" . | nindent 8 }}
     spec:
+      # --- AKV CSI volume ---
+      volumes:
+        - name: akv-secrets
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "backend-akv"
+
       containers:
         - name: backend
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          # --- Env from K8s Secret synced from Key Vault ---
+          envFrom:
+            - secretRef:
+                name: backend-db-secrets
+
+          # If you still need non‑secret env vars from values.yaml, keep them here:
+          {{- with .Values.env.extra }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
           ports:
             - containerPort: {{ .Values.service.targetPort }}
-          env:
-            - name: DB_HOST
-              value: {{ .Values.env.dbHost | quote }}
-            - name: DB_PORT
-              value: {{ .Values.env.dbPort | quote }}
-            - name: DB_NAME
-              value: {{ .Values.env.dbName | quote }}
-            - name: DB_USER
-              value: {{ .Values.env.dbUser | quote }}
-            - name: DB_PASSWORD
-              value: {{ .Values.env.dbPassword | quote }}
-            # For DB_USER/DB_PASSWORD we’ll wire from secret later
+
+          volumeMounts:
+            - name: akv-secrets
+              mountPath: "/mnt/akv"
+              readOnly: true
+
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

@@ -19,3 +19,7 @@ variable "dns_service_ip" { default = "10.10.0.10" }
 variable "appgw_id" {
   description = "Resource ID of the Application Gateway for AGIC"
 }
+
+variable "akv_name" {}
+variable "tenant_id" {}
+variable "subscription_id" {}
