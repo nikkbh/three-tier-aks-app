@@ -202,6 +202,40 @@ module "aks_kv_identity_secrets_user_role_assignment" {
   scope_id     = module.akv.id
 }
 
+module "uami-github-cicd" {
+  source   = "../modules/user-assigned-identity"
+  name     = "UAMI_GH_CICD"
+  location = var.location
+  rg_name  = module.rg.name
+  tags     = var.tags
+}
+
+module "gh_federated_credential_cicd" {
+  source                             = "../modules/federated-identity-credential"
+  federated_identity_credential_name = "${var.github_organization_target}-${var.github_repository}"
+  rg_name                            = module.rg.name
+  user_assigned_identity_id          = module.uami-github-cicd.user_assigned_identity_id
+  subject                            = "repo:${var.github_organization_target}/${var.github_repository}:ref:refs/heads/main"
+  audience_name                      = local.default_audience_name
+  issuer_url                         = local.github_issuer_url
+}
+
+module "uami_github_acr_push_user_role_assignment" {
+  source       = "../modules/role-assignment"
+  role_name    = "AcrPush"
+  principal_id = module.uami-github-cicd.user_assigned_identity_principal_id
+  scope_id     = module.acr.acr_id
+}
+
+module "uami_github_aks_user_role_assignment" {
+  source       = "../modules/role-assignment"
+  role_name    = "Azure Kubernetes Service Cluster Admin Role"
+  principal_id = module.uami-github-cicd.user_assigned_identity_principal_id
+  scope_id     = module.aks.id
+}
+
+
+
 
 
 

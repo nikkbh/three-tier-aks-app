@@ -52,14 +52,14 @@ resource "kubernetes_manifest" "backend_akv_spc" {
     spec = {
       provider = "azure"
       parameters = {
-        usePodIdentity       = "false"
-        useVMManagedIdentity = "true"
-        clientID             = "1fa01411-a04c-4cec-9c0f-a290fc559d27"
-        keyvaultName         = var.akv_name
-        tenantId             = var.tenant_id
-        subscriptionId       = var.subscription_id
-        resourceGroup        = var.resource_group_name
-        cloudName            = "" # Azure public
+        usePodIdentity         = "false"
+        useVMManagedIdentity   = "true"
+        userAssignedIdentityID = "1fa01411-a04c-4cec-9c0f-a290fc559d27"
+        keyvaultName           = var.akv_name
+        tenantId               = var.tenant_id
+        subscriptionId         = var.subscription_id
+        resourceGroup          = var.resource_group_name
+        cloudName              = "" # Azure public
 
         objects = <<-EOT
           array:
@@ -89,7 +89,7 @@ resource "kubernetes_manifest" "backend_akv_spc" {
           data = [
             {
               objectName = "db-username"
-              key        = "DB_USERNAME"
+              key        = "DB_USER"
             },
             {
               objectName = "db-password"

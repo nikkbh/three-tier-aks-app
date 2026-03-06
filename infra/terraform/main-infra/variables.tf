@@ -83,3 +83,13 @@ variable "db_username" {
   type        = string
   sensitive   = true
 }
+
+variable "github_organization_target" {
+  type        = string
+  description = "Github Organization for which the federated identity credential will be created to be used by CI CD UAMI"
+}
+
+variable "github_repository" {
+  type        = string
+  description = "Github Repository for which the federated identity credential will be created to be used by CI CD UAMI"
+}
