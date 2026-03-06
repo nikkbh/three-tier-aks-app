@@ -6,6 +6,7 @@ metadata:
   labels:
     app: {{ include "backend.name" . }}
   annotations:
+    kubernetes.io/ingress.class: {{ .Values.ingress.className | default "azure-application-gateway" }}
 spec:
   ingressClassName: {{ .Values.ingress.className | default "azure-application-gateway" }}
   rules:

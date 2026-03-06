@@ -61,7 +61,7 @@ ingress:
   enabled: true
   className: azure-application-gateway # AKS Application‑Gateway Ingress Controller
   annotations:
-    kubernetes.io/ingress.class: azure/application-gateway
+    # kubernetes.io/ingress.class: azure/application-gateway
     appgw.ingress.kubernetes.io/health-probe-path: "/health"
   hosts:
     - host: "" # empty host → catch‑all on the gateway’s IP

@@ -19,7 +19,7 @@ import (
 func ListUsers(c *fiber.Ctx) error {
 	db := c.Locals("db").(*gorm.DB)
 	var users []models.User
-	if err := db.Find(&users).Error; err != nil {
+	if err := db.Order("created_at DESC").Find(&users).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 	return c.JSON(users)
