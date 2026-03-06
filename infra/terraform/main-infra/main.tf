@@ -234,6 +234,13 @@ module "uami_github_aks_user_role_assignment" {
   scope_id     = module.aks.id
 }
 
+module "uami_github_aks_cluster_user_role_assignment" {
+  source       = "../modules/role-assignment"
+  role_name    = "Azure Kubernetes Service Cluster User Role"
+  principal_id = module.uami-github-cicd.user_assigned_identity_principal_id
+  scope_id     = module.aks.id
+}
+
 
 
 

@@ -123,6 +123,7 @@ jobs:
 
   deploy:
     needs:
+      - detect-changes
       - build-backend
       - build-frontend
     if: |
@@ -155,9 +156,27 @@ jobs:
       - name: Deploy charts via Helm
         run: |
           cd manifests/helm
-          helm upgrade --install backend ./backend \
-            --set image.repository=${{ secrets.ACR_LOGIN_SERVER }}/backend \
-            --set image.tag=${{ github.sha }}
-          helm upgrade --install frontend ./frontend \
-            --set image.repository=${{ secrets.ACR_LOGIN_SERVER }}/frontend \
-            --set image.tag=${{ github.sha }}
+          if [ "${{needs.detect-changes.outputs.backend}}" == "true" ]; then
+            helm upgrade --install backend ./backend \
+              --namespace prod
+              --set image.repository=${{ secrets.ACR_LOGIN_SERVER }}/backend \
+              --set image.tag=${{ github.sha }}
+          fi
+
+          if [ "${{needs.detect-changes.outputs.frontend}}" == "true" ]; then
+            helm upgrade --install frontend ./frontend \
+              --namespace prod
+              --set image.repository=${{ secrets.ACR_LOGIN_SERVER }}/frontend \
+              --set image.tag=${{ github.sha }}
+          fi
+
+          if [ "${{ needs.detect-changes.outputs.manifests }}" == "true" ]; then
+            helm upgrade --install backend ./backend \
+              --namespace prod \
+              --set image.repository=${{ secrets.ACR_LOGIN_SERVER }}/backend \
+              --set image.tag=${{ github.sha }}
+            helm upgrade --install frontend ./frontend \
+              --namespace prod \
+              --set image.repository=${{ secrets.ACR_LOGIN_SERVER }}/frontend \
+              --set image.tag=${{ github.sha }}
+          fi
