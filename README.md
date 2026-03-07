@@ -2,8 +2,6 @@
 
 A production-grade three-tier application (frontend, backend, database) deployed on Azure Kubernetes Service (AKS) with Application Gateway ingress, Key Vault integration, and PostgreSQL backend.
 
-![System Flow](assets/image.png)
-
 ## 📋 Table of Contents
 
 - [Architecture](#architecture)
@@ -21,41 +19,7 @@ A production-grade three-tier application (frontend, backend, database) deployed
 
 The application follows a three-tier microservices architecture:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   Azure Application Gateway                 │
-│                                                             │
-│  ┌─────────────────────────────────────────────────────┐  │
-│  │              Ingress Controller (AGIC)              │  │
-│  │  /          →  frontend:80  (nginx)                │  │
-│  │  /api       →  backend:80   (Go API)               │  │
-│  └─────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────────┐
-│                    AKS Cluster (prod)                       │
-│                                                             │
-│  ┌──────────────────┐  ┌──────────────────┐              │
-│  │  Frontend Pod    │  │  Backend Pod     │              │
-│  │  (nginx + SPA)   │  │  (Go + Fiber)    │              │
-│  │  Port: 80        │  │  Port: 8080      │              │
-│  └──────────────────┘  └──────────────────┘              │
-│           ↓                      ↓                         │
-│  ┌───────────────────────────────────────────────────┐  │
-│  │         Azure Key Vault (Secrets)                 │  │
-│  │  - DB Username                                   │  │
-│  │  - DB Password                                   │  │
-│  │  - DB Name                                       │  │
-│  └───────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────────┐
-│              Azure Database for PostgreSQL                  │
-│                                                             │
-│  - users table (CRUD operations)                      │
-│  - UUID extension (uuid-ossp)                         │
-└─────────────────────────────────────────────────────────────┘
-```
+![System Architecture Diagram](/assets/architecture.svg)
 
 ### Components
 
@@ -159,6 +123,8 @@ echo "http://$APP_GW_IP"
 
 ```
 three-tier-aks-app/
+├──.gihub/workflows/
+|   ├──ci-cd.yaml                 # CI/CD pipeline using Github Actions
 ├── frontend/                      # React SPA
 │   ├── src/
 │   │   ├── api/users.ts          # API client
@@ -198,7 +164,7 @@ three-tier-aks-app/
 │           ├── database/
 │           └── key-vault/
 │
-├── Jenkinsfile                    # CI/CD pipeline
+├── Jenkinsfile                    # CI/CD pipeline (Not used)
 └── README.md
 ```
 
@@ -251,9 +217,9 @@ kubectl rollout status deployment/backend -n prod
 
 ## 🔄 CI/CD Pipeline
 
-### Jenkins Pipeline
+### Github Actions Workflow
 
-A `Jenkinsfile` is included for automated builds and deployments. The pipeline:
+A `ci-cd.yaml` is included for automated builds and deployments. The pipeline:
 
 1. Checks out code from Git
 2. Builds frontend & backend Docker images
@@ -261,15 +227,11 @@ A `Jenkinsfile` is included for automated builds and deployments. The pipeline:
 4. Deploys via Helm charts
 5. Verifies rollout status
 
-#### Setup
+#### Pre-requisites:
 
-1. Create Jenkins credentials:
-   - `acr-credentials` — ACR username/password
-   - `kubeconfig-prod` — Kubernetes config file
-
-2. Create a Jenkins pipeline job pointing to this repo's `Jenkinsfile`
-
-3. Trigger the pipeline on Git push (webhook)
+1. Set the following github actions secrets: `AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, AZURE_CLIENT_ID, ACR_LOGIN_SERVER, AKS_RG, AKS_CLUSTER`.
+2. A UAMI with the following roles assigned `ACRPush and Azure Kubernetes Cluster User Role`
+3. The UAMI above should have a Federated Identity Credential created with subject and claims set correctly to the repository the Pipeline will be triggered from.
 
 #### Run Manually
 

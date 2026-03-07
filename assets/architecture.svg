@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" width="1200" height="780" font-family="'Segoe UI', Arial, sans-serif">
+
+  <!-- Background -->
+  <rect width="1200" height="780" fill="#0d1117" rx="10"/>
+
+  <!-- Title -->
+  <text x="600" y="34" text-anchor="middle" font-size="16" font-weight="bold" fill="#e6edf3" letter-spacing="1">Three-Tier Application — Azure Architecture</text>
+  <text x="600" y="52" text-anchor="middle" font-size="10" fill="#8b949e" letter-spacing="1">AKS · Application Gateway · PostgreSQL Flexible Server · Key Vault · ACR</text>
+
+  <!-- ═══════════════════════════════════════════════════════
+       ROW 1: GitHub Actions + Terraform (side by side, outside VNet)
+  ═══════════════════════════════════════════════════════ -->
+
+  <!-- GitHub Actions box -->
+  <rect x="20" y="68" width="340" height="90" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="30" y="84" font-size="9" fill="#8b949e" letter-spacing="1.5">GITHUB</text>
+  <!-- Developer -->
+  <rect x="30" y="90" width="90" height="58" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="75" y="114" text-anchor="middle" font-size="16">👨‍💻</text>
+  <text x="75" y="129" text-anchor="middle" font-size="9" fill="#c9d1d9">Developer</text>
+  <text x="75" y="141" text-anchor="middle" font-size="8" fill="#6e7681">push / PR</text>
+  <!-- arrow -->
+  <line x1="120" y1="119" x2="138" y2="119" stroke="#58a6ff" stroke-width="1.2"/>
+  <polygon points="138,115 145,119 138,123" fill="#58a6ff"/>
+  <!-- GitHub Actions -->
+  <rect x="145" y="90" width="100" height="58" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="195" y="114" text-anchor="middle" font-size="16">⚙️</text>
+  <text x="195" y="129" text-anchor="middle" font-size="9" fill="#c9d1d9">GitHub Actions</text>
+  <text x="195" y="141" text-anchor="middle" font-size="8" fill="#6e7681">CI/CD · OIDC</text>
+  <!-- arrow -->
+  <line x1="245" y1="119" x2="263" y2="119" stroke="#58a6ff" stroke-width="1.2"/>
+  <polygon points="263,115 270,119 263,123" fill="#58a6ff"/>
+  <!-- Build -->
+  <rect x="270" y="90" width="80" height="58" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="310" y="114" text-anchor="middle" font-size="16">📦</text>
+  <text x="310" y="129" text-anchor="middle" font-size="9" fill="#c9d1d9">Build</text>
+  <text x="310" y="141" text-anchor="middle" font-size="8" fill="#6e7681">Docker image</text>
+
+  <!-- Terraform box -->
+  <rect x="375" y="68" width="180" height="90" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="385" y="84" font-size="9" fill="#8b949e" letter-spacing="1.5">INFRASTRUCTURE</text>
+  <rect x="385" y="90" width="160" height="58" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="465" y="114" text-anchor="middle" font-size="16">🏗️</text>
+  <text x="465" y="129" text-anchor="middle" font-size="9" fill="#c9d1d9">Terraform</text>
+  <text x="465" y="141" text-anchor="middle" font-size="8" fill="#6e7681">VNet · AKS · AppGW · KV · DB</text>
+
+  <!-- ACR box (top right, standalone) -->
+  <rect x="570" y="68" width="180" height="90" rx="8" fill="#161b22" stroke="#1f6feb" stroke-width="1"/>
+  <text x="580" y="84" font-size="9" fill="#58a6ff" letter-spacing="1.5">AZURE · CONTAINER REGISTRY</text>
+  <rect x="580" y="90" width="160" height="58" rx="6" fill="#0d2640" stroke="#1f6feb" stroke-width="1"/>
+  <text x="660" y="114" text-anchor="middle" font-size="16">🗂️</text>
+  <text x="660" y="129" text-anchor="middle" font-size="9" fill="#79c0ff">Container Registry</text>
+  <text x="660" y="141" text-anchor="middle" font-size="8" fill="#58a6ff">backend:tag · frontend:tag</text>
+
+  <!-- Arrow: ACR down into VNet -->
+  <line x1="660" y1="158" x2="660" y2="178" stroke="#1f6feb" stroke-width="1.2"/>
+  <polygon points="655,178 660,185 665,178" fill="#1f6feb"/>
+  <text x="662" y="174" font-size="7" fill="#58a6ff">image pull</text>
+
+  <!-- Arrow: GitHub Actions helm deploy down -->
+  <line x1="195" y1="148" x2="195" y2="178" stroke="#58a6ff" stroke-width="1.2"/>
+  <polygon points="190,178 195,185 200,178" fill="#58a6ff"/>
+  <text x="197" y="174" font-size="7" fill="#58a6ff">helm deploy</text>
+
+  <!-- Internet user -->
+  <rect x="770" y="68" width="200" height="90" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="780" y="84" font-size="9" fill="#8b949e" letter-spacing="1.5">INTERNET</text>
+  <rect x="780" y="90" width="180" height="58" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="870" y="114" text-anchor="middle" font-size="16">🌍</text>
+  <text x="870" y="129" text-anchor="middle" font-size="9" fill="#c9d1d9">Public User Traffic</text>
+  <text x="870" y="141" text-anchor="middle" font-size="8" fill="#6e7681">HTTPS requests</text>
+
+  <!-- Arrow: Internet to AppGW -->
+  <line x1="870" y1="158" x2="870" y2="238" stroke="#e3b341" stroke-width="1.5"/>
+  <polygon points="865,238 870,245 875,238" fill="#e3b341"/>
+
+  <!-- ═══════════════════════════════════════════════════════
+       AZURE VNET
+  ═══════════════════════════════════════════════════════ -->
+  <rect x="20" y="188" width="1160" height="575" rx="12" fill="#0d2038" stroke="#1f6feb" stroke-width="1.5" fill-opacity="0.4"/>
+  <rect x="32" y="182" width="190" height="14" rx="3" fill="#0d1117"/>
+  <text x="36" y="193" font-size="9" fill="#58a6ff" letter-spacing="1.5">AZURE VIRTUAL NETWORK</text>
+
+  <!-- PUBLIC SUBNET -->
+  <rect x="36" y="200" width="1148" height="130" rx="8" fill="#e3b34108" stroke="#e3b34145" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="52" y="217" font-size="9" fill="#e3b341" letter-spacing="1.5">▸ PUBLIC SUBNET</text>
+
+  <rect x="620" y="224" width="360" height="90" rx="8" fill="#2d220800" stroke="#e3b34155" stroke-width="1"/>
+  <rect x="620" y="224" width="360" height="90" rx="8" fill="#e3b34110"/>
+  <text x="800" y="248" text-anchor="middle" font-size="18">🌐</text>
+  <text x="800" y="266" text-anchor="middle" font-size="11" font-weight="bold" fill="#f0c842">Azure Application Gateway</text>
+  <text x="800" y="281" text-anchor="middle" font-size="9" fill="#e3b341">Public IP · L7 Load Balancer · WAF</text>
+  <text x="800" y="296" text-anchor="middle" font-size="8" fill="#8b949e">/ → frontend pod    |    /api → backend pod</text>
+  <rect x="630" y="302" width="340" height="14" rx="4" fill="#e3b34112"/>
+  <text x="800" y="313" text-anchor="middle" font-size="8" fill="#e3b341">Managed by AGIC (App Gateway Ingress Controller)</text>
+
+  <!-- Arrow AppGW to AKS -->
+  <line x1="800" y1="330" x2="800" y2="358" stroke="#3fb950" stroke-width="1.5"/>
+  <polygon points="795,358 800,365 805,358" fill="#3fb950"/>
+  <text x="802" y="352" font-size="7" fill="#3fb950">VNet internal</text>
+
+  <!-- PRIVATE SUBNET AKS -->
+  <rect x="36" y="368" width="1148" height="260" rx="8" fill="#0a2a1a08" stroke="#3fb95040" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="52" y="385" font-size="9" fill="#3fb950" letter-spacing="1.5">▸ PRIVATE SUBNET — AKS Cluster (Kubernetes)</text>
+
+  <!-- AGIC pod -->
+  <rect x="52" y="396" width="150" height="90" rx="8" fill="#0a2a1a" stroke="#3fb95040" stroke-width="1"/>
+  <text x="127" y="420" text-anchor="middle" font-size="16">🎛️</text>
+  <text x="127" y="438" text-anchor="middle" font-size="10" font-weight="bold" fill="#56d364">AGIC</text>
+  <text x="127" y="452" text-anchor="middle" font-size="8" fill="#3fb950">Ingress Controller</text>
+  <rect x="62" y="462" width="130" height="14" rx="4" fill="#3fb95015"/>
+  <text x="127" y="473" text-anchor="middle" font-size="7" fill="#3fb950">programs AppGW rules</text>
+
+  <!-- Frontend pod -->
+  <rect x="220" y="396" width="170" height="90" rx="8" fill="#0d2640" stroke="#1f6feb" stroke-width="1"/>
+  <text x="305" y="420" text-anchor="middle" font-size="16">🖥️</text>
+  <text x="305" y="438" text-anchor="middle" font-size="10" font-weight="bold" fill="#79c0ff">Frontend Pod</text>
+  <text x="305" y="452" text-anchor="middle" font-size="8" fill="#58a6ff">React + Nginx · :80</text>
+  <rect x="230" y="462" width="150" height="14" rx="4" fill="#1f6feb18"/>
+  <text x="305" y="473" text-anchor="middle" font-size="7" fill="#58a6ff">ClusterIP · path: /</text>
+
+  <!-- Backend pod -->
+  <rect x="410" y="396" width="170" height="90" rx="8" fill="#0a2a1a" stroke="#3fb95050" stroke-width="1"/>
+  <text x="495" y="420" text-anchor="middle" font-size="16">⚙️</text>
+  <text x="495" y="438" text-anchor="middle" font-size="10" font-weight="bold" fill="#56d364">Backend Pod</text>
+  <text x="495" y="452" text-anchor="middle" font-size="8" fill="#3fb950">Go + Fiber · :8080</text>
+  <rect x="420" y="462" width="150" height="14" rx="4" fill="#3fb95015"/>
+  <text x="495" y="473" text-anchor="middle" font-size="7" fill="#3fb950">ClusterIP :80 → :8080 · path: /api</text>
+
+  <!-- Key Vault CSI pod -->
+  <rect x="600" y="396" width="170" height="90" rx="8" fill="#2a1a2e" stroke="#8957e540" stroke-width="1"/>
+  <text x="685" y="420" text-anchor="middle" font-size="16">🔑</text>
+  <text x="685" y="438" text-anchor="middle" font-size="10" font-weight="bold" fill="#d2a8ff">Key Vault CSI</text>
+  <text x="685" y="452" text-anchor="middle" font-size="8" fill="#bc8cff">Secrets Store Driver</text>
+  <rect x="610" y="462" width="150" height="14" rx="4" fill="#8957e518"/>
+  <text x="685" y="473" text-anchor="middle" font-size="7" fill="#bc8cff">mounts secrets as env vars</text>
+
+  <!-- UAMI -->
+  <rect x="790" y="396" width="150" height="90" rx="8" fill="#2a1a2e" stroke="#8957e535" stroke-width="1"/>
+  <text x="865" y="420" text-anchor="middle" font-size="16">🔐</text>
+  <text x="865" y="438" text-anchor="middle" font-size="10" font-weight="bold" fill="#d2a8ff">UAMI</text>
+  <text x="865" y="452" text-anchor="middle" font-size="8" fill="#bc8cff">Managed Identity</text>
+  <rect x="800" y="462" width="130" height="14" rx="4" fill="#8957e515"/>
+  <text x="865" y="473" text-anchor="middle" font-size="7" fill="#bc8cff">ACR pull · KV access · AKS</text>
+
+  <!-- Helm releases -->
+  <rect x="960" y="396" width="200" height="90" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="1060" y="416" text-anchor="middle" font-size="9" fill="#8b949e">HELM RELEASES</text>
+  <text x="1060" y="434" text-anchor="middle" font-size="9" fill="#c9d1d9">frontend · backend</text>
+  <rect x="970" y="442" width="180" height="14" rx="4" fill="#3fb95012"/>
+  <text x="1060" y="453" text-anchor="middle" font-size="8" fill="#3fb950">namespace: prod</text>
+  <rect x="970" y="460" width="180" height="14" rx="4" fill="#1f6feb12"/>
+  <text x="1060" y="471" text-anchor="middle" font-size="8" fill="#58a6ff">image tag: commit SHA</text>
+
+  <!-- Private DNS Zone strip -->
+  <rect x="52" y="502" width="1110" height="30" rx="6" fill="#2a1a2e18" stroke="#8957e530" stroke-width="1"/>
+  <text x="607" y="522" text-anchor="middle" font-size="9" fill="#d2a8ff">🔍  Private DNS Zone — resolves PostgreSQL hostname to private VNet IP</text>
+
+  <!-- Arrow Backend to PostgreSQL -->
+  <line x1="495" y1="548" x2="495" y2="578" stroke="#bc8cff" stroke-width="1.5"/>
+  <polygon points="490,578 495,585 500,578" fill="#bc8cff"/>
+  <text x="520" y="568" font-size="7" fill="#bc8cff">port 5432 · SSL</text>
+
+  <!-- Arrow Key Vault CSI to Key Vault -->
+  <line x1="685" y1="548" x2="685" y2="578" stroke="#8957e5" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <polygon points="680,578 685,585 690,578" fill="#8957e5"/>
+
+  <!-- PRIVATE SUBNET PostgreSQL -->
+  <rect x="36" y="588" width="560" height="130" rx="8" fill="#2a1a2e08" stroke="#8957e535" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="52" y="605" font-size="9" fill="#d2a8ff" letter-spacing="1.5">▸ PRIVATE SUBNET — PostgreSQL (delegated · VNet-injected)</text>
+
+  <rect x="52" y="615" width="530" height="88" rx="8" fill="#2a1a2e" stroke="#8957e545" stroke-width="1"/>
+  <text x="317" y="641" text-anchor="middle" font-size="18">🗄️</text>
+  <text x="317" y="659" text-anchor="middle" font-size="11" font-weight="bold" fill="#d2a8ff">Azure PostgreSQL Flexible Server</text>
+  <text x="317" y="674" text-anchor="middle" font-size="9" fill="#bc8cff">VNet injection · no public endpoint · accessible only within VNet</text>
+  <rect x="100" y="680" width="434" height="14" rx="4" fill="#8957e515"/>
+  <text x="317" y="691" text-anchor="middle" font-size="8" fill="#8957e5">users table · UUID extension · GORM ORM</text>
+
+  <!-- PRIVATE SUBNET Key Vault -->
+  <rect x="616" y="588" width="560" height="130" rx="8" fill="#2a1a2e08" stroke="#8957e530" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="632" y="605" font-size="9" fill="#d2a8ff" letter-spacing="1.5">▸ AZURE KEY VAULT</text>
+
+  <rect x="632" y="615" width="530" height="88" rx="8" fill="#2a1a2e" stroke="#8957e540" stroke-width="1"/>
+  <text x="897" y="641" text-anchor="middle" font-size="18">🔒</text>
+  <text x="897" y="659" text-anchor="middle" font-size="11" font-weight="bold" fill="#d2a8ff">Azure Key Vault</text>
+  <text x="897" y="674" text-anchor="middle" font-size="9" fill="#bc8cff">DB credentials · connection strings · app secrets</text>
+  <rect x="680" y="680" width="434" height="14" rx="4" fill="#8957e515"/>
+  <text x="897" y="691" text-anchor="middle" font-size="8" fill="#8957e5">mounted via CSI Driver · accessed via UAMI</text>
+
+  <!-- LEGEND -->
+  <rect x="20" y="742" width="1160" height="32" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <circle cx="42" cy="758" r="4" fill="#e3b341"/>
+  <text x="52" y="762" font-size="8" fill="#8b949e">Public Subnet</text>
+  <circle cx="135" cy="758" r="4" fill="#3fb950"/>
+  <text x="145" y="762" font-size="8" fill="#8b949e">Private Subnet (AKS)</text>
+  <circle cx="258" cy="758" r="4" fill="#8957e5"/>
+  <text x="268" y="762" font-size="8" fill="#8b949e">Private Subnet (DB · KV)</text>
+  <circle cx="398" cy="758" r="4" fill="#58a6ff"/>
+  <text x="408" y="762" font-size="8" fill="#8b949e">Azure Managed</text>
+  <circle cx="498" cy="758" r="4" fill="#56d364"/>
+  <text x="508" y="762" font-size="8" fill="#8b949e">K8s Workload</text>
+  <circle cx="588" cy="758" r="4" fill="#d2a8ff"/>
+  <text x="598" y="762" font-size="8" fill="#8b949e">Identity / Secrets</text>
+  <line x1="680" y1="758" x2="705" y2="758" stroke="#58a6ff" stroke-width="1.5"/>
+  <polygon points="705,754 712,758 705,762" fill="#58a6ff"/>
+  <text x="717" y="762" font-size="8" fill="#8b949e">traffic flow</text>
+  <line x1="800" y1="758" x2="825" y2="758" stroke="#8957e5" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <polygon points="825,754 832,758 825,762" fill="#8957e5"/>
+  <text x="837" y="762" font-size="8" fill="#8b949e">secret mount</text>
+  <rect x="940" y="750" width="220" height="16" rx="4" fill="#0d2038"/>
+  <text x="1050" y="762" text-anchor="middle" font-size="8" fill="#58a6ff">Infrastructure provisioned via Terraform</text>
+</svg>
